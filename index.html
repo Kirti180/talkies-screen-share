@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Workdesk</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Talkies | Screen-share</title>
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
@@ -18,7 +19,7 @@
     />
   </head>
   <body>
-    <h2 class="titile">Welcome to Talkies</h2>
+
 
     <div>
       <img src="meltedgroup.png" width="30%" alt="" />
@@ -29,19 +30,20 @@
       <div class="modelContainer">
         <div class="entry-modal" id="entry-modal">
           <center><img src="./icon.png" alt="" width="80%" /></center>
-          <div class="inputbox">
-            <input
+          <!-- <div class="inputbox"> -->
+            <!-- <input
               type="text"
               id="room-input"
               class="room-input"
               placeholder="Enter Your Room ID"
-            />
-          </div>
+            /> -->
+          <!-- </div> -->
           <div id="control">
             <button
               class="top-two"
               type="button"
               class="btn btn-success"
+              id="create-room"
               onclick="createRoom()"
             >
               Create Room
@@ -49,8 +51,9 @@
             <button
               class="top-two"
               type="button"
+              id="join-room"
               class="btn btn-info"
-              onclick="joinRoom()"
+              onclick="alert()"
             >
               Join Room
             </button>
@@ -67,7 +70,7 @@
       <!--There will we local video elements  -->
 
       <video id="local-video"></video>
-      <div class="meet-controls-bar">
+      <div class="meet-controls-bar" id="down-control">
         <button
           class="bottom-two"
           type="button"
@@ -84,6 +87,12 @@
         >
           Stop Share
         </button>
+        <a href="https://talkies-lets-connect.netlify.app/dashboard.html">
+          <button id="leave" class="bottom-two">
+            Leave
+          </button>
+
+        </a>
       </div>
     </div>
   </body>

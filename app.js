@@ -9,24 +9,35 @@ const getUserMedia =
   navigator.mozGetUserMedia;
 var local_stream;
 var screenStream;
+const controls = document.getElementById("down-control");
+controls.style.display = "none";
 
 var peer = null;
 var currentPeer = null;
 var screenSharing = false;
 
 // create room function...
-function createRoom() {
+async function createRoom() {
+
   console.log("Room has been created");
-  const room = document.getElementById("room-input").value;
+  const room = Math.floor(Math.random() * 900) + 100;
 
   // check room should not empty.
   if (room == " " || room == " ") {
     alert("Please submit room id");
     return;
   }
+  const request = await fetch(`https://video-chat-rbe8.onrender.com/room/create`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({ roomID: room, type: "screenshare" })
+  });
+  controls.style.display = "block";
   room_id = PRE + room + SUF;
   peer = new Peer(room_id);
-
+  Swal.fire(`Your Room ID is ${room}`);
   peer.on("open", (id) => {
     console.log("Peer has joined ID no", id);
     hideModal();
@@ -79,16 +90,59 @@ function notify(msg) {
   }, 3000);
 }
 
-function joinRoom() {
+function alert() {
+  Swal.fire({
+    title: 'Enter Your Room Number',
+    input: 'text',
+    inputAttributes: {
+      autocapitalize: 'off',
+      placeholder: 'XXX',
+      required: true,
+      id: 'roomID2',
+      typeof: 'number'
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Join',
+    showLoaderOnConfirm: true,
+
+    allowOutsideClick: () => !Swal.isLoading()
+  })
+
+  document.getElementsByClassName('swal2-confirm swal2-styled')[0].addEventListener("click", async()=>{
+    const room = document.getElementById("roomID2").value;
+    console.log(room);
+    const request = await fetch(`https://video-chat-rbe8.onrender.com/room/join`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ roomID: room, type: "screenshare" })
+    });
+    const response = await request.json();
+  
+    if(response.ok){
+      joinRoom(room);
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `${response.msg}`,
+      })
+    }
+
+  })
+
+}
+
+async function joinRoom(room) {
   console.log("User is Joining Room");
 
-  let room = document.getElementById("room-input").value;
   if (room == " " || room == "") {
     alert("Please enter room number");
     return;
   }
   room_id = PRE + room + SUF;
-
+  controls.style.display = "block";
   hideModal();
   peer = new Peer();
   peer.on("open", (id) => {
@@ -110,6 +164,7 @@ function joinRoom() {
       }
     );
   });
+
 }
 
 // start sharing here
