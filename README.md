@@ -10,7 +10,8 @@ this is a real time screen sharing application
   - socket.io
   
   
-#Usecase
+  
+# Usecase
  
  - create the room
  - you will get random room id
